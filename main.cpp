@@ -1,4 +1,4 @@
-//скриншоты в issue (рисунки 11-15)
+//скриншоты в issue (рисунки 16-20)
 
 #include <iostream>
 #include <omp.h>
@@ -17,6 +17,8 @@ double par(void)
 	double pi;
 	double S = 0.0;
 	step = 1.0 / (double)num;
+	omp_lock_t writelock;
+	omp_init_lock(&writelock);
 	
 	double t = omp_get_wtime();
 	
@@ -27,9 +29,11 @@ double par(void)
 			{
 				x = (i + 0.5)*step;
 				S = S + 4.0 / (1.0 + x*x);
-				#pragma omp critical
-				inc++;				
+				omp_set_lock(&writelock);
+				inc++; 
+				omp_unset_lock(&writelock);		
 			}
+		omp_destroy_lock(&writelock);
 	}
 	t = omp_get_wtime() - t;
 	pi = step * S;
