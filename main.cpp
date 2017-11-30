@@ -1,4 +1,4 @@
-//скриншоты в issue (рисунки 6-10)
+//скриншоты в issue (рисунки 11-15)
 
 #include <iostream>
 #include <omp.h>
@@ -27,7 +27,7 @@ double par(void)
 			{
 				x = (i + 0.5)*step;
 				S = S + 4.0 / (1.0 + x*x);
-				#pragma omp atomic
+				#pragma omp critical
 				inc++;				
 			}
 	}
